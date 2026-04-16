@@ -414,6 +414,94 @@ func (x *OrderStatusUpdate) GetIdempotencyKey() string {
 	return ""
 }
 
+type ListPaymentsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        string                 `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"` // "Authorized" или "Declined"
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListPaymentsRequest) Reset() {
+	*x = ListPaymentsRequest{}
+	mi := &file_contract_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListPaymentsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListPaymentsRequest) ProtoMessage() {}
+
+func (x *ListPaymentsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListPaymentsRequest.ProtoReflect.Descriptor instead.
+func (*ListPaymentsRequest) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListPaymentsRequest) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+type ListPaymentsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Payments      []*PaymentResponse     `protobuf:"bytes,1,rep,name=payments,proto3" json:"payments,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListPaymentsResponse) Reset() {
+	*x = ListPaymentsResponse{}
+	mi := &file_contract_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListPaymentsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListPaymentsResponse) ProtoMessage() {}
+
+func (x *ListPaymentsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListPaymentsResponse.ProtoReflect.Descriptor instead.
+func (*ListPaymentsResponse) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ListPaymentsResponse) GetPayments() []*PaymentResponse {
+	if x != nil {
+		return x.Payments
+	}
+	return nil
+}
+
 var File_contract_proto protoreflect.FileDescriptor
 
 const file_contract_proto_rawDesc = "" +
@@ -442,7 +530,11 @@ const file_contract_proto_rawDesc = "" +
 	"\x06status\x18\x05 \x01(\x0e2\x15.contract.OrderStatusR\x06status\x129\n" +
 	"\n" +
 	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12'\n" +
-	"\x0fidempotency_key\x18\a \x01(\tR\x0eidempotencyKey*\x91\x01\n" +
+	"\x0fidempotency_key\x18\a \x01(\tR\x0eidempotencyKey\"-\n" +
+	"\x13ListPaymentsRequest\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\tR\x06status\"M\n" +
+	"\x14ListPaymentsResponse\x125\n" +
+	"\bpayments\x18\x01 \x03(\v2\x19.contract.PaymentResponseR\bpayments*\x91\x01\n" +
 	"\vOrderStatus\x12\x1c\n" +
 	"\x18ORDER_STATUS_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14ORDER_STATUS_PENDING\x10\x01\x12\x15\n" +
@@ -452,9 +544,10 @@ const file_contract_proto_rawDesc = "" +
 	"\rPaymentStatus\x12\x1e\n" +
 	"\x1aPAYMENT_STATUS_UNSPECIFIED\x10\x00\x12\x1d\n" +
 	"\x19PAYMENT_STATUS_AUTHORIZED\x10\x01\x12\x1b\n" +
-	"\x17PAYMENT_STATUS_DECLINED\x10\x022W\n" +
+	"\x17PAYMENT_STATUS_DECLINED\x10\x022\xa6\x01\n" +
 	"\x0ePaymentService\x12E\n" +
-	"\x0eProcessPayment\x12\x18.contract.PaymentRequest\x1a\x19.contract.PaymentResponse2q\n" +
+	"\x0eProcessPayment\x12\x18.contract.PaymentRequest\x1a\x19.contract.PaymentResponse\x12M\n" +
+	"\fListPayments\x12\x1d.contract.ListPaymentsRequest\x1a\x1e.contract.ListPaymentsResponse2q\n" +
 	"\x14OrderTrackingService\x12Y\n" +
 	"\x17SubscribeToOrderUpdates\x12\x1f.contract.SubscribeOrderRequest\x1a\x1b.contract.OrderStatusUpdate0\x01B7Z5github.com/AldiyarMaget/aitu-go-sdk/contract;contractb\x06proto3"
 
@@ -471,7 +564,7 @@ func file_contract_proto_rawDescGZIP() []byte {
 }
 
 var file_contract_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_contract_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_contract_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_contract_proto_goTypes = []any{
 	(OrderStatus)(0),              // 0: contract.OrderStatus
 	(PaymentStatus)(0),            // 1: contract.PaymentStatus
@@ -479,22 +572,27 @@ var file_contract_proto_goTypes = []any{
 	(*PaymentResponse)(nil),       // 3: contract.PaymentResponse
 	(*SubscribeOrderRequest)(nil), // 4: contract.SubscribeOrderRequest
 	(*OrderStatusUpdate)(nil),     // 5: contract.OrderStatusUpdate
-	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
+	(*ListPaymentsRequest)(nil),   // 6: contract.ListPaymentsRequest
+	(*ListPaymentsResponse)(nil),  // 7: contract.ListPaymentsResponse
+	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
 }
 var file_contract_proto_depIdxs = []int32{
 	1, // 0: contract.PaymentRequest.status:type_name -> contract.PaymentStatus
 	1, // 1: contract.PaymentResponse.status:type_name -> contract.PaymentStatus
 	0, // 2: contract.OrderStatusUpdate.status:type_name -> contract.OrderStatus
-	6, // 3: contract.OrderStatusUpdate.created_at:type_name -> google.protobuf.Timestamp
-	2, // 4: contract.PaymentService.ProcessPayment:input_type -> contract.PaymentRequest
-	4, // 5: contract.OrderTrackingService.SubscribeToOrderUpdates:input_type -> contract.SubscribeOrderRequest
-	3, // 6: contract.PaymentService.ProcessPayment:output_type -> contract.PaymentResponse
-	5, // 7: contract.OrderTrackingService.SubscribeToOrderUpdates:output_type -> contract.OrderStatusUpdate
-	6, // [6:8] is the sub-list for method output_type
-	4, // [4:6] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	8, // 3: contract.OrderStatusUpdate.created_at:type_name -> google.protobuf.Timestamp
+	3, // 4: contract.ListPaymentsResponse.payments:type_name -> contract.PaymentResponse
+	2, // 5: contract.PaymentService.ProcessPayment:input_type -> contract.PaymentRequest
+	6, // 6: contract.PaymentService.ListPayments:input_type -> contract.ListPaymentsRequest
+	4, // 7: contract.OrderTrackingService.SubscribeToOrderUpdates:input_type -> contract.SubscribeOrderRequest
+	3, // 8: contract.PaymentService.ProcessPayment:output_type -> contract.PaymentResponse
+	7, // 9: contract.PaymentService.ListPayments:output_type -> contract.ListPaymentsResponse
+	5, // 10: contract.OrderTrackingService.SubscribeToOrderUpdates:output_type -> contract.OrderStatusUpdate
+	8, // [8:11] is the sub-list for method output_type
+	5, // [5:8] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_contract_proto_init() }
@@ -508,7 +606,7 @@ func file_contract_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_contract_proto_rawDesc), len(file_contract_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   2,
 		},
