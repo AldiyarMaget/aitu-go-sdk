@@ -420,7 +420,6 @@ type ListPaymentsRequest struct {
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
-
 func (x *ListPaymentsRequest) Reset() {
 	*x = ListPaymentsRequest{}
 	mi := &file_contract_proto_msgTypes[4]
