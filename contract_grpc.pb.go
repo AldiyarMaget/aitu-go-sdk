@@ -19,6 +19,111 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	OrderTrackingService_SubscribeToOrderUpdates_FullMethodName = "/contract.OrderTrackingService/SubscribeToOrderUpdates"
+)
+
+// OrderTrackingServiceClient is the client API for OrderTrackingService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type OrderTrackingServiceClient interface {
+	SubscribeToOrderUpdates(ctx context.Context, in *SubscribeOrderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OrderStatusUpdate], error)
+}
+
+type orderTrackingServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewOrderTrackingServiceClient(cc grpc.ClientConnInterface) OrderTrackingServiceClient {
+	return &orderTrackingServiceClient{cc}
+}
+
+func (c *orderTrackingServiceClient) SubscribeToOrderUpdates(ctx context.Context, in *SubscribeOrderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OrderStatusUpdate], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &OrderTrackingService_ServiceDesc.Streams[0], OrderTrackingService_SubscribeToOrderUpdates_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeOrderRequest, OrderStatusUpdate]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type OrderTrackingService_SubscribeToOrderUpdatesClient = grpc.ServerStreamingClient[OrderStatusUpdate]
+
+// OrderTrackingServiceServer is the server API for OrderTrackingService service.
+// All implementations must embed UnimplementedOrderTrackingServiceServer
+// for forward compatibility.
+type OrderTrackingServiceServer interface {
+	SubscribeToOrderUpdates(*SubscribeOrderRequest, grpc.ServerStreamingServer[OrderStatusUpdate]) error
+	mustEmbedUnimplementedOrderTrackingServiceServer()
+}
+
+// UnimplementedOrderTrackingServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedOrderTrackingServiceServer struct{}
+
+func (UnimplementedOrderTrackingServiceServer) SubscribeToOrderUpdates(*SubscribeOrderRequest, grpc.ServerStreamingServer[OrderStatusUpdate]) error {
+	return status.Error(codes.Unimplemented, "method SubscribeToOrderUpdates not implemented")
+}
+func (UnimplementedOrderTrackingServiceServer) mustEmbedUnimplementedOrderTrackingServiceServer() {}
+func (UnimplementedOrderTrackingServiceServer) testEmbeddedByValue()                              {}
+
+// UnsafeOrderTrackingServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to OrderTrackingServiceServer will
+// result in compilation errors.
+type UnsafeOrderTrackingServiceServer interface {
+	mustEmbedUnimplementedOrderTrackingServiceServer()
+}
+
+func RegisterOrderTrackingServiceServer(s grpc.ServiceRegistrar, srv OrderTrackingServiceServer) {
+	// If the following call panics, it indicates UnimplementedOrderTrackingServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&OrderTrackingService_ServiceDesc, srv)
+}
+
+func _OrderTrackingService_SubscribeToOrderUpdates_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeOrderRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(OrderTrackingServiceServer).SubscribeToOrderUpdates(m, &grpc.GenericServerStream[SubscribeOrderRequest, OrderStatusUpdate]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type OrderTrackingService_SubscribeToOrderUpdatesServer = grpc.ServerStreamingServer[OrderStatusUpdate]
+
+// OrderTrackingService_ServiceDesc is the grpc.ServiceDesc for OrderTrackingService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var OrderTrackingService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "contract.OrderTrackingService",
+	HandlerType: (*OrderTrackingServiceServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeToOrderUpdates",
+			Handler:       _OrderTrackingService_SubscribeToOrderUpdates_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "contract.proto",
+}
+
+const (
 	PaymentService_ProcessPayment_FullMethodName = "/contract.PaymentService/ProcessPayment"
 	PaymentService_ListPayments_FullMethodName   = "/contract.PaymentService/ListPayments"
 )
@@ -155,110 +260,5 @@ var PaymentService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "contract.proto",
-}
-
-const (
-	OrderTrackingService_SubscribeToOrderUpdates_FullMethodName = "/contract.OrderTrackingService/SubscribeToOrderUpdates"
-)
-
-// OrderTrackingServiceClient is the client API for OrderTrackingService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type OrderTrackingServiceClient interface {
-	SubscribeToOrderUpdates(ctx context.Context, in *SubscribeOrderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OrderStatusUpdate], error)
-}
-
-type orderTrackingServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewOrderTrackingServiceClient(cc grpc.ClientConnInterface) OrderTrackingServiceClient {
-	return &orderTrackingServiceClient{cc}
-}
-
-func (c *orderTrackingServiceClient) SubscribeToOrderUpdates(ctx context.Context, in *SubscribeOrderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OrderStatusUpdate], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &OrderTrackingService_ServiceDesc.Streams[0], OrderTrackingService_SubscribeToOrderUpdates_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[SubscribeOrderRequest, OrderStatusUpdate]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type OrderTrackingService_SubscribeToOrderUpdatesClient = grpc.ServerStreamingClient[OrderStatusUpdate]
-
-// OrderTrackingServiceServer is the server API for OrderTrackingService service.
-// All implementations must embed UnimplementedOrderTrackingServiceServer
-// for forward compatibility.
-type OrderTrackingServiceServer interface {
-	SubscribeToOrderUpdates(*SubscribeOrderRequest, grpc.ServerStreamingServer[OrderStatusUpdate]) error
-	mustEmbedUnimplementedOrderTrackingServiceServer()
-}
-
-// UnimplementedOrderTrackingServiceServer must be embedded to have
-// forward compatible implementations.
-//
-// NOTE: this should be embedded by value instead of pointer to avoid a nil
-// pointer dereference when methods are called.
-type UnimplementedOrderTrackingServiceServer struct{}
-
-func (UnimplementedOrderTrackingServiceServer) SubscribeToOrderUpdates(*SubscribeOrderRequest, grpc.ServerStreamingServer[OrderStatusUpdate]) error {
-	return status.Error(codes.Unimplemented, "method SubscribeToOrderUpdates not implemented")
-}
-func (UnimplementedOrderTrackingServiceServer) mustEmbedUnimplementedOrderTrackingServiceServer() {}
-func (UnimplementedOrderTrackingServiceServer) testEmbeddedByValue()                              {}
-
-// UnsafeOrderTrackingServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to OrderTrackingServiceServer will
-// result in compilation errors.
-type UnsafeOrderTrackingServiceServer interface {
-	mustEmbedUnimplementedOrderTrackingServiceServer()
-}
-
-func RegisterOrderTrackingServiceServer(s grpc.ServiceRegistrar, srv OrderTrackingServiceServer) {
-	// If the following call panics, it indicates UnimplementedOrderTrackingServiceServer was
-	// embedded by pointer and is nil.  This will cause panics if an
-	// unimplemented method is ever invoked, so we test this at initialization
-	// time to prevent it from happening at runtime later due to I/O.
-	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
-		t.testEmbeddedByValue()
-	}
-	s.RegisterService(&OrderTrackingService_ServiceDesc, srv)
-}
-
-func _OrderTrackingService_SubscribeToOrderUpdates_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(SubscribeOrderRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(OrderTrackingServiceServer).SubscribeToOrderUpdates(m, &grpc.GenericServerStream[SubscribeOrderRequest, OrderStatusUpdate]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type OrderTrackingService_SubscribeToOrderUpdatesServer = grpc.ServerStreamingServer[OrderStatusUpdate]
-
-// OrderTrackingService_ServiceDesc is the grpc.ServiceDesc for OrderTrackingService service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var OrderTrackingService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "contract.OrderTrackingService",
-	HandlerType: (*OrderTrackingServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "SubscribeToOrderUpdates",
-			Handler:       _OrderTrackingService_SubscribeToOrderUpdates_Handler,
-			ServerStreams: true,
-		},
-	},
 	Metadata: "contract.proto",
 }

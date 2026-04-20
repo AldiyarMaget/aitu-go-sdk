@@ -416,10 +416,11 @@ func (x *OrderStatusUpdate) GetIdempotencyKey() string {
 
 type ListPaymentsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        string                 `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"` // "Authorized" или "Declined"
+	Status        string                 `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
+
 func (x *ListPaymentsRequest) Reset() {
 	*x = ListPaymentsRequest{}
 	mi := &file_contract_proto_msgTypes[4]
@@ -543,12 +544,12 @@ const file_contract_proto_rawDesc = "" +
 	"\rPaymentStatus\x12\x1e\n" +
 	"\x1aPAYMENT_STATUS_UNSPECIFIED\x10\x00\x12\x1d\n" +
 	"\x19PAYMENT_STATUS_AUTHORIZED\x10\x01\x12\x1b\n" +
-	"\x17PAYMENT_STATUS_DECLINED\x10\x022\xa6\x01\n" +
+	"\x17PAYMENT_STATUS_DECLINED\x10\x022q\n" +
+	"\x14OrderTrackingService\x12Y\n" +
+	"\x17SubscribeToOrderUpdates\x12\x1f.contract.SubscribeOrderRequest\x1a\x1b.contract.OrderStatusUpdate0\x012\xa6\x01\n" +
 	"\x0ePaymentService\x12E\n" +
 	"\x0eProcessPayment\x12\x18.contract.PaymentRequest\x1a\x19.contract.PaymentResponse\x12M\n" +
-	"\fListPayments\x12\x1d.contract.ListPaymentsRequest\x1a\x1e.contract.ListPaymentsResponse2q\n" +
-	"\x14OrderTrackingService\x12Y\n" +
-	"\x17SubscribeToOrderUpdates\x12\x1f.contract.SubscribeOrderRequest\x1a\x1b.contract.OrderStatusUpdate0\x01B7Z5github.com/AldiyarMaget/aitu-go-sdk/contract;contractb\x06proto3"
+	"\fListPayments\x12\x1d.contract.ListPaymentsRequest\x1a\x1e.contract.ListPaymentsResponseB7Z5github.com/AldiyarMaget/aitu-go-sdk/contract;contractb\x06proto3"
 
 var (
 	file_contract_proto_rawDescOnce sync.Once
@@ -581,12 +582,12 @@ var file_contract_proto_depIdxs = []int32{
 	0, // 2: contract.OrderStatusUpdate.status:type_name -> contract.OrderStatus
 	8, // 3: contract.OrderStatusUpdate.created_at:type_name -> google.protobuf.Timestamp
 	3, // 4: contract.ListPaymentsResponse.payments:type_name -> contract.PaymentResponse
-	2, // 5: contract.PaymentService.ProcessPayment:input_type -> contract.PaymentRequest
-	6, // 6: contract.PaymentService.ListPayments:input_type -> contract.ListPaymentsRequest
-	4, // 7: contract.OrderTrackingService.SubscribeToOrderUpdates:input_type -> contract.SubscribeOrderRequest
-	3, // 8: contract.PaymentService.ProcessPayment:output_type -> contract.PaymentResponse
-	7, // 9: contract.PaymentService.ListPayments:output_type -> contract.ListPaymentsResponse
-	5, // 10: contract.OrderTrackingService.SubscribeToOrderUpdates:output_type -> contract.OrderStatusUpdate
+	4, // 5: contract.OrderTrackingService.SubscribeToOrderUpdates:input_type -> contract.SubscribeOrderRequest
+	2, // 6: contract.PaymentService.ProcessPayment:input_type -> contract.PaymentRequest
+	6, // 7: contract.PaymentService.ListPayments:input_type -> contract.ListPaymentsRequest
+	5, // 8: contract.OrderTrackingService.SubscribeToOrderUpdates:output_type -> contract.OrderStatusUpdate
+	3, // 9: contract.PaymentService.ProcessPayment:output_type -> contract.PaymentResponse
+	7, // 10: contract.PaymentService.ListPayments:output_type -> contract.ListPaymentsResponse
 	8, // [8:11] is the sub-list for method output_type
 	5, // [5:8] is the sub-list for method input_type
 	5, // [5:5] is the sub-list for extension type_name
